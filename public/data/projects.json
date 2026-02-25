@@ -1,0 +1,53 @@
+[
+  {
+    "id": 5,
+    "name": "Hire Catalog Automation Specialist",
+    "description": "Hire a new Catalog Automation Specialist. Working with Debbie Pietreface.",
+    "status": "active",
+    "priority": "high",
+    "requested_by": null,
+    "owner": "self",
+    "deadline": null,
+    "start_date": null,
+    "completion_date": null,
+    "category": "process",
+    "origin": "internal initiative",
+    "notes": null,
+    "created_at": "2026-02-24 19:21:20",
+    "updated_at": "2026-02-24 19:21:20"
+  },
+  {
+    "id": 8,
+    "name": "Home Depot Data Integration",
+    "description": "Data integration partnership with Home Depot. Providing ACES/PIES data and cost/retails for onboarding CarParts SKUs to homedepot.com.",
+    "status": "active",
+    "priority": "high",
+    "requested_by": null,
+    "owner": null,
+    "deadline": null,
+    "start_date": null,
+    "completion_date": null,
+    "category": "data quality",
+    "origin": "cross-functional",
+    "notes": "Primary contact: Keira Kelley (Home Depot). Meeting held 2026-02-05.",
+    "created_at": "2026-02-24 19:57:04",
+    "updated_at": "2026-02-24 19:57:04"
+  },
+  {
+    "id": 6,
+    "name": "General",
+    "description": "Catch-all for tactical tasks not tied to a specific project.",
+    "status": "active",
+    "priority": "medium",
+    "requested_by": null,
+    "owner": null,
+    "deadline": null,
+    "start_date": null,
+    "completion_date": null,
+    "category": "process",
+    "origin": "internal initiative",
+    "notes": null,
+    "created_at": "2026-02-24 19:47:10",
+    "updated_at": "2026-02-24 19:47:10"
+  }
+]

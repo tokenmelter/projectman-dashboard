@@ -23,7 +23,6 @@ npm-debug.log*
 next-env.d.ts
 
 # exported data (generated at build time)
-/public/data/
 
 # sqlite db copy
 projectman.db
