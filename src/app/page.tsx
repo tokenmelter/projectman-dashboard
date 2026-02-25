@@ -276,7 +276,11 @@ export default function Dashboard() {
               </tr>
             </thead>
             <tbody>
-              {people.map((person) => (
+              {[...people].sort((a, b) => {
+                const aName = `${a.last_name || ''} ${a.first_name || ''}`.trim().toLowerCase();
+                const bName = `${b.last_name || ''} ${b.first_name || ''}`.trim().toLowerCase();
+                return aName.localeCompare(bName);
+              }).map((person) => (
                 <tr key={person.id}>
                   <td>
                     {[person.first_name, person.last_name]
