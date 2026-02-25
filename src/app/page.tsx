@@ -78,8 +78,18 @@ export default function Dashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [expandedTask, setExpandedTask] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>("tasks");
+  const [authed, setAuthed] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [password, setPassword] = useState("");
+  const [authError, setAuthError] = useState(false);
 
   useEffect(() => {
+    setAuthed(localStorage.getItem("pm_authed") === "1");
+    setAuthChecked(true);
+  }, []);
+
+  useEffect(() => {
+    if (!authed) return;
     Promise.all([
       fetch("/data/tasks.json").then((r) => r.json()),
       fetch("/data/projects.json").then((r) => r.json()),
@@ -91,7 +101,45 @@ export default function Dashboard() {
       setPeople(pe);
       setStats(s);
     });
-  }, []);
+  }, [authed]);
+
+  function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    if (password === "carparts") {
+      localStorage.setItem("pm_authed", "1");
+      setAuthed(true);
+      setAuthError(false);
+    } else {
+      setAuthError(true);
+    }
+  }
+
+  function handleLogout() {
+    localStorage.removeItem("pm_authed");
+    setAuthed(false);
+    setPassword("");
+  }
+
+  if (!authChecked) return null;
+
+  if (!authed) {
+    return (
+      <div className="gate-overlay">
+        <form className="gate-form" onSubmit={handleLogin}>
+          <h1>Projectman</h1>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => { setPassword(e.target.value); setAuthError(false); }}
+            autoFocus
+          />
+          <button type="submit">Submit</button>
+          {authError && <div className="gate-error">Wrong password</div>}
+        </form>
+      </div>
+    );
+  }
 
   const taskCountByProject = tasks.reduce<Record<number, number>>((acc, t) => {
     if (t.project_id) acc[t.project_id] = (acc[t.project_id] || 0) + 1;
@@ -104,6 +152,8 @@ export default function Dashboard() {
         <h1>Projectman</h1>
         <div className="deploy-time">
           Deployed: {process.env.NEXT_PUBLIC_BUILD_TIME}
+          {" · "}
+          <a href="#" className="logout-link" onClick={(e) => { e.preventDefault(); handleLogout(); }}>Logout</a>
         </div>
         <div className="subtitle">
           {stats
