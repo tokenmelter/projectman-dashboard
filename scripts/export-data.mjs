@@ -7,17 +7,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = join(__dirname, '..');
 const outDir = join(projectRoot, 'public', 'data');
 
-// Database source - check local copy first, then original location
-const localDb = join(projectRoot, 'projectman.db');
-const sourceDb = join(process.env.HOME, '.openclaw', 'workspace-projectman', 'projectman.db');
+// Always read from the live database
+const dbPath = join(process.env.HOME, '.openclaw', 'workspace-projectman', 'projectman.db');
 
-let dbPath;
-if (existsSync(localDb)) {
-  dbPath = localDb;
-} else if (existsSync(sourceDb)) {
-  dbPath = sourceDb;
-} else {
-  console.error('Could not find projectman.db');
+if (!existsSync(dbPath)) {
+  console.error('Could not find projectman.db at', dbPath);
   process.exit(1);
 }
 
