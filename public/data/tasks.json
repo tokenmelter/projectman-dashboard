@@ -20,7 +20,7 @@
     "project_id": 5,
     "title": "Review candidate submittal - Eric Diaz",
     "description": "Actions:\n1. Review Eric Diaz resume/submittal for Catalog Automation Specialist role\n2. Evaluate fit\n3. Reply to Debbie Pietreface with decision (proceed to interview or pass)",
-    "status": "todo",
+    "status": "done",
     "priority": "high",
     "assigned_to": "self",
     "due_date": "2026-02-27",
@@ -28,7 +28,7 @@
     "blocked_by": null,
     "notes": "Email: \"Candidate Submittal - Eric Diaz (Catalog Automation Specialist)\"",
     "created_at": "2026-02-24 19:21:20",
-    "updated_at": "2026-02-24 19:21:20",
+    "updated_at": "2026-02-25 01:21:51",
     "project_name": "Hire Catalog Automation Specialist"
   },
   {
@@ -68,7 +68,7 @@
     "project_id": 5,
     "title": "Reject LinkedIn candidates email",
     "description": "Actions:\n1. Reply to email \"FW: Linked In Profiles - Catalog Automation Specialist\"\n2. Communicate that all 3 candidates (Shweta Gupta, Alekhya Anaveni, Rishi Gulati) are not interested\n3. Ask Debbie to continue sourcing",
-    "status": "todo",
+    "status": "done",
     "priority": "medium",
     "assigned_to": "self",
     "due_date": "2026-02-27",
@@ -76,7 +76,7 @@
     "blocked_by": null,
     "notes": "Email: \"FW: Linked In Profiles - Catalog Automation Specialist\" - 3 candidates not interested: Shweta Gupta, Alekhya Anaveni, Rishi Gulati",
     "created_at": "2026-02-24 19:21:20",
-    "updated_at": "2026-02-24 19:21:20",
+    "updated_at": "2026-02-25 01:21:51",
     "project_name": "Hire Catalog Automation Specialist"
   },
   {
