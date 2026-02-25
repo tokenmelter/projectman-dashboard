@@ -53,6 +53,18 @@ function formatLabel(s: string): string {
   return s.replace(/_/g, " ");
 }
 
+function timeLeft(d: string | null): { text: string; className: string } {
+  if (!d) return { text: "—", className: "time-left-none" };
+  const now = new Date();
+  const due = new Date(d + "T23:59:59");
+  const diffMs = due.getTime() - now.getTime();
+  const diffHours = Math.ceil(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  if (diffMs < 0) return { text: `${Math.abs(diffDays)}d overdue`, className: "time-left-overdue" };
+  if (diffHours <= 24) return { text: `${diffHours}h`, className: "time-left-urgent" };
+  return { text: `${diffDays}d`, className: "time-left-ok" };
+}
+
 export default function Dashboard() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [people, setPeople] = useState<Person[]>([]);
@@ -210,6 +222,9 @@ export default function Dashboard() {
                       <span>{task.project_name} &middot; </span>
                     )}
                     {formatDate(task.due_date)}
+                  </span>
+                  <span className={`time-left ${timeLeft(task.due_date).className}`}>
+                    {timeLeft(task.due_date).text}
                   </span>
                 </div>
                 {expandedTask === task.id && (

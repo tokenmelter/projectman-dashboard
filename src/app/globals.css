@@ -138,7 +138,7 @@ section h2 .count {
 
 .task-row {
   display: grid;
-  grid-template-columns: 70px 1fr auto auto auto;
+  grid-template-columns: 70px 1fr auto auto auto 60px;
   align-items: center;
   gap: 0.75rem;
   padding: 0.6rem 1rem;
@@ -408,4 +408,28 @@ section h2 .count {
     min-width: 90px;
     padding: 0.5rem 0.75rem;
   }
+}
+
+/* Time left column */
+.time-left {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.time-left-ok {
+  color: var(--low);
+}
+
+.time-left-urgent {
+  color: var(--high);
+}
+
+.time-left-overdue {
+  color: var(--critical);
+}
+
+.time-left-none {
+  color: var(--text-muted);
 }
