@@ -90,17 +90,14 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!authed) return;
-    Promise.all([
-      fetch("/data/tasks.json").then((r) => r.json()),
-      fetch("/data/projects.json").then((r) => r.json()),
-      fetch("/data/people.json").then((r) => r.json()),
-      fetch("/data/stats.json").then((r) => r.json()),
-    ]).then(([t, p, pe, s]) => {
-      setTasks(t);
-      setProjects(p);
-      setPeople(pe);
-      setStats(s);
-    });
+    fetch("/api/data")
+      .then((r) => r.json())
+      .then((data) => {
+        setTasks(data.tasks || []);
+        setProjects(data.projects || []);
+        setPeople(data.people || []);
+        setStats(data.stats || null);
+      });
   }, [authed]);
 
   function handleLogin(e: React.FormEvent) {
