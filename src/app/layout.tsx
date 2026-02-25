@@ -13,6 +13,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <meta httpEquiv="refresh" content="60" />
+      </head>
       <body>{children}</body>
     </html>
   );
