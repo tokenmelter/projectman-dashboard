@@ -199,7 +199,10 @@ export default function Dashboard() {
             </span>
           </h2>
           <div className="task-list">
-            {tasks.filter((t) => activeTab === "tasks" ? t.status !== "done" && t.status !== "cancelled" : t.status === "done").map((task) => (
+            {(activeTab === "done"
+              ? [...tasks.filter((t) => t.status === "done")].sort((a, b) => (b.updated_at || "").localeCompare(a.updated_at || ""))
+              : tasks.filter((t) => t.status !== "done" && t.status !== "cancelled")
+            ).map((task) => (
               <div key={task.id} className="task-item">
                 <div
                   className="task-row"
@@ -223,9 +226,11 @@ export default function Dashboard() {
                     )}
                     {formatDate(task.due_date)}
                   </span>
-                  <span className={`time-left ${timeLeft(task.due_date).className}`}>
-                    {timeLeft(task.due_date).text}
-                  </span>
+                  {activeTab !== "done" && (
+                    <span className={`time-left ${timeLeft(task.due_date).className}`}>
+                      {timeLeft(task.due_date).text}
+                    </span>
+                  )}
                 </div>
                 {expandedTask === task.id && (
                   <div className="task-expanded">
