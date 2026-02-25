@@ -11,14 +11,18 @@ export async function POST(request: NextRequest) {
 
   const body = await request.json();
 
-  await Promise.all(
-    KEYS.map((key) =>
-      put(`projectman/${key}.json`, JSON.stringify(body[key] ?? []), {
-        access: 'public',
-        addRandomSuffix: false,
-      })
-    )
-  );
-
-  return NextResponse.json({ ok: true });
+  try {
+    await Promise.all(
+      KEYS.map((key) =>
+        put(`projectman/${key}.json`, JSON.stringify(body[key] ?? []), {
+          access: 'public',
+          addRandomSuffix: false,
+        })
+      )
+    );
+    return NextResponse.json({ ok: true });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }
