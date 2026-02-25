@@ -169,6 +169,32 @@ export default function Dashboard() {
         </div>
       )}
 
+      {tasks.length > 0 && (() => {
+        const current = tasks.filter((t) => t.status !== "done" && t.status !== "cancelled");
+        const pc: Record<string, number> = {};
+        current.forEach((t) => { pc[t.priority] = (pc[t.priority] || 0) + 1; });
+        return (
+          <div className="stats-bar priority-bar">
+            <div className="stat-card">
+              <div className="label" style={{color: 'var(--critical)'}}>Critical</div>
+              <div className="value" style={{color: 'var(--critical)'}}>{pc["critical"] || 0}</div>
+            </div>
+            <div className="stat-card">
+              <div className="label" style={{color: 'var(--high)'}}>High</div>
+              <div className="value" style={{color: 'var(--high)'}}>{pc["high"] || 0}</div>
+            </div>
+            <div className="stat-card">
+              <div className="label" style={{color: 'var(--medium)'}}>Medium</div>
+              <div className="value" style={{color: 'var(--medium)'}}>{pc["medium"] || 0}</div>
+            </div>
+            <div className="stat-card">
+              <div className="label" style={{color: 'var(--low)'}}>Low</div>
+              <div className="value" style={{color: 'var(--low)'}}>{pc["low"] || 0}</div>
+            </div>
+          </div>
+        );
+      })()}
+
       <div className="tabs">
         <button
           className={`tab ${activeTab === "tasks" ? "active" : ""}`}
