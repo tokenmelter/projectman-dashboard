@@ -102,6 +102,9 @@ export default function Dashboard() {
     <div className="dashboard">
       <header>
         <h1>Projectman</h1>
+        <div className="deploy-time">
+          Deployed: {process.env.NEXT_PUBLIC_BUILD_TIME}
+        </div>
         <div className="subtitle">
           {stats
             ? `${stats.totalTasks} tasks · ${stats.totalProjects} projects · ${stats.totalPeople} people`
