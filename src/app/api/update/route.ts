@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
         put(`projectman/${key}.json`, JSON.stringify(body[key] ?? []), {
           access: 'public',
           addRandomSuffix: false,
+          allowOverwrite: true,
         })
       )
     );
