@@ -19,24 +19,6 @@ interface Task {
   project_name: string | null;
 }
 
-interface Project {
-  id: number;
-  name: string;
-  description: string | null;
-  status: string;
-  priority: string;
-  requested_by: string | null;
-  owner: string | null;
-  deadline: string | null;
-  start_date: string | null;
-  completion_date: string | null;
-  category: string | null;
-  origin: string | null;
-  notes: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
 interface Person {
   id: number;
   first_name: string | null;
@@ -59,10 +41,10 @@ interface Stats {
   exportedAt: string;
 }
 
-type Tab = "tasks" | "done" | "projects" | "people";
+type Tab = "tasks" | "done" | "people";
 
 function formatDate(d: string | null): string {
-  if (!d) return "—";
+  if (!d) return "\u2014";
   const date = new Date(d);
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
@@ -73,7 +55,6 @@ function formatLabel(s: string): string {
 
 export default function Dashboard() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [projects, setProjects] = useState<Project[]>([]);
   const [people, setPeople] = useState<Person[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [expandedTask, setExpandedTask] = useState<number | null>(null);
@@ -90,14 +71,15 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!authed) return;
-    fetch("/api/data")
-      .then((r) => r.json())
-      .then((data) => {
-        setTasks(data.tasks || []);
-        setProjects(data.projects || []);
-        setPeople(data.people || []);
-        setStats(data.stats || null);
-      });
+    Promise.all([
+      fetch("/data/tasks.json").then((r) => r.json()),
+      fetch("/data/people.json").then((r) => r.json()),
+      fetch("/data/stats.json").then((r) => r.json()),
+    ]).then(([tasksData, peopleData, statsData]) => {
+      setTasks(tasksData || []);
+      setPeople(peopleData || []);
+      setStats(statsData || null);
+    });
   }, [authed]);
 
   function handleLogin(e: React.FormEvent) {
@@ -138,23 +120,18 @@ export default function Dashboard() {
     );
   }
 
-  const taskCountByProject = tasks.reduce<Record<number, number>>((acc, t) => {
-    if (t.project_id) acc[t.project_id] = (acc[t.project_id] || 0) + 1;
-    return acc;
-  }, {});
-
   return (
     <div className="dashboard">
       <header>
         <h1>Projectman</h1>
         <div className="deploy-time">
           Deployed: {process.env.NEXT_PUBLIC_BUILD_TIME}
-          {" · "}
+          {" \u00b7 "}
           <a href="#" className="logout-link" onClick={(e) => { e.preventDefault(); handleLogout(); }}>Logout</a>
         </div>
         <div className="subtitle">
           {stats
-            ? `${stats.totalTasks} tasks · ${stats.totalProjects} projects · ${stats.totalPeople} people`
+            ? `${stats.totalTasks} tasks \u00b7 ${stats.totalProjects} projects \u00b7 ${stats.totalPeople} people`
             : "Loading..."}
         </div>
       </header>
@@ -196,12 +173,6 @@ export default function Dashboard() {
           Done
         </button>
         <button
-          className={`tab ${activeTab === "projects" ? "active" : ""}`}
-          onClick={() => setActiveTab("projects")}
-        >
-          Projects
-        </button>
-        <button
           className={`tab ${activeTab === "people" ? "active" : ""}`}
           onClick={() => setActiveTab("people")}
         >
@@ -238,7 +209,7 @@ export default function Dashboard() {
                   </span>
                   <span className="task-meta">
                     {task.project_name && (
-                      <span>{task.project_name} · </span>
+                      <span>{task.project_name} &middot; </span>
                     )}
                     {formatDate(task.due_date)}
                   </span>
@@ -277,43 +248,6 @@ export default function Dashboard() {
         </section>
       )}
 
-      {activeTab === "projects" && (
-        <section>
-          <h2>
-            Projects <span className="count">({projects.length})</span>
-          </h2>
-          <div className="project-grid">
-            {projects.map((project) => (
-              <div key={project.id} className="project-card">
-                <h3>{project.name}</h3>
-                {project.description && (
-                  <div className="desc">{project.description}</div>
-                )}
-                <div className="meta-row">
-                  <span className={`badge status-${project.status}`}>
-                    {formatLabel(project.status)}
-                  </span>
-                  <span className={`badge priority-${project.priority}`}>
-                    {project.priority}
-                  </span>
-                  <span className="task-count">
-                    {taskCountByProject[project.id] || 0} tasks
-                  </span>
-                  {project.owner && (
-                    <span className="task-count">owner: {project.owner}</span>
-                  )}
-                  {project.deadline && (
-                    <span className="task-count">
-                      due {formatDate(project.deadline)}
-                    </span>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
       {activeTab === "people" && (
         <section>
           <h2>
@@ -334,11 +268,11 @@ export default function Dashboard() {
                   <td>
                     {[person.first_name, person.last_name]
                       .filter(Boolean)
-                      .join(" ") || "—"}
+                      .join(" ") || "\u2014"}
                   </td>
-                  <td>{person.role || "—"}</td>
-                  <td>{person.department || "—"}</td>
-                  <td>{person.company || "—"}</td>
+                  <td>{person.role || "\u2014"}</td>
+                  <td>{person.department || "\u2014"}</td>
+                  <td>{person.company || "\u2014"}</td>
                 </tr>
               ))}
             </tbody>

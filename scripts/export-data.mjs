@@ -1,4 +1,5 @@
-import { existsSync, writeFileSync } from 'fs';
+import Database from 'better-sqlite3';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 const dbPath = join(process.env.HOME, '.openclaw', 'workspace-projectman', 'projectman.db');
@@ -7,8 +8,6 @@ if (!existsSync(dbPath)) {
   console.error('Could not find projectman.db at', dbPath);
   process.exit(1);
 }
-
-const { default: Database } = await import('better-sqlite3');
 
 const db = new Database(dbPath, { readonly: true });
 
@@ -64,7 +63,14 @@ for (const p of projects) {
 
 db.close();
 
-const output = { tasks, projects, people, project_people, decisions, stats };
-const outPath = '/tmp/projectman-export.json';
-writeFileSync(outPath, JSON.stringify(output));
-console.log(`Exported to ${outPath}`);
+const outDir = join(import.meta.dirname, '..', 'public', 'data');
+mkdirSync(outDir, { recursive: true });
+
+writeFileSync(join(outDir, 'tasks.json'), JSON.stringify(tasks));
+writeFileSync(join(outDir, 'people.json'), JSON.stringify(people));
+writeFileSync(join(outDir, 'stats.json'), JSON.stringify(stats));
+writeFileSync(join(outDir, 'projects.json'), JSON.stringify(projects));
+writeFileSync(join(outDir, 'project_people.json'), JSON.stringify(project_people));
+writeFileSync(join(outDir, 'decisions.json'), JSON.stringify(decisions));
+
+console.log(`Exported ${tasks.length} tasks, ${projects.length} projects, ${people.length} people to ${outDir}`);

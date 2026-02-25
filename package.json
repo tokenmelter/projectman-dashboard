@@ -10,7 +10,6 @@
     "export-data": "node scripts/export-data.mjs"
   },
   "dependencies": {
-    "@vercel/blob": "^2.3.0",
     "next": "^15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
