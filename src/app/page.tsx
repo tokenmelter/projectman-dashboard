@@ -59,7 +59,7 @@ interface Stats {
   exportedAt: string;
 }
 
-type Tab = "tasks" | "projects" | "people";
+type Tab = "tasks" | "done" | "projects" | "people";
 
 function formatDate(d: string | null): string {
   if (!d) return "—";
@@ -143,6 +143,12 @@ export default function Dashboard() {
           Tasks
         </button>
         <button
+          className={`tab ${activeTab === "done" ? "active" : ""}`}
+          onClick={() => setActiveTab("done")}
+        >
+          Done
+        </button>
+        <button
           className={`tab ${activeTab === "projects" ? "active" : ""}`}
           onClick={() => setActiveTab("projects")}
         >
@@ -156,13 +162,16 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {activeTab === "tasks" && (
+      {(activeTab === "tasks" || activeTab === "done") && (
         <section>
           <h2>
-            All Tasks <span className="count">({tasks.length})</span>
+            {activeTab === "tasks" ? "Current Tasks" : "Completed"}{" "}
+            <span className="count">
+              ({tasks.filter((t) => activeTab === "tasks" ? t.status !== "done" && t.status !== "cancelled" : t.status === "done").length})
+            </span>
           </h2>
           <div className="task-list">
-            {tasks.map((task) => (
+            {tasks.filter((t) => activeTab === "tasks" ? t.status !== "done" && t.status !== "cancelled" : t.status === "done").map((task) => (
               <div key={task.id} className="task-item">
                 <div
                   className="task-row"
